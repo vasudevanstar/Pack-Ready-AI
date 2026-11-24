@@ -7,6 +7,9 @@ const csv = require('csv-parser');
 const { generate100Records } = require('./data/syntheticRecords');
 const { assessRecord, calculateOverallStats } = require('./services/rulesEngine');
 const { runDataQualityAudit } = require('./services/qualityEngine');
+const { runFullReadinessAssessment, DEFAULT_WEIGHTS } = require('./services/readinessEngine');
+const { runGapAnalysis } = require('./services/gapAnalysisEngine');
+const { generateRecommendations, updateRecommendationStatus } = require('./services/recommendationEngine');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,24 +29,28 @@ const upload = multer({ dest: uploadDir });
 let packagingRecords = generate100Records();
 let auditLogs = [
   {
-    id: 'LOG-001',
-    timestamp: new Date().toISOString(),
+    id: 'ACT-001',
     action: 'SYSTEM_INITIALIZATION',
-    user: 'System Admin',
-    details: 'Initialized PackReady AI demonstration prototype with 105 synthetic packaging records.'
+    relatedRecord: 'CATALOG_INIT',
+    timestamp: new Date(Date.now() - 3600000).toISOString(),
+    user: 'System Administrator',
+    description: 'Initialized PackReady AI prototype with 105 synthetic packaging specifications for TECHgium evaluation.'
   }
 ];
 
 // Helper to log audit activity
-function logActivity(action, user, details) {
-  auditLogs.unshift({
-    id: `LOG-${String(auditLogs.length + 1).padStart(3, '0')}`,
-    timestamp: new Date().toISOString(),
+function logActivity(action, relatedRecord, user, description) {
+  const newLog = {
+    id: `ACT-${String(auditLogs.length + 1).padStart(3, '0')}`,
     action,
+    relatedRecord: relatedRecord || 'GENERAL_CATALOG',
+    timestamp: new Date().toISOString(),
     user: user || 'Demonstration User',
-    details
-  });
-  if (auditLogs.length > 200) auditLogs.pop();
+    description
+  };
+  auditLogs.unshift(newLog);
+  if (auditLogs.length > 500) auditLogs.pop();
+  return newLog;
 }
 
 // 1. Health check & Project Meta
@@ -98,7 +105,6 @@ app.get('/api/records', (req, res) => {
     results = results.filter(r => (r.packagingLevel || '').toLowerCase().includes(format.toLowerCase()));
   }
 
-  // Enrich with live assessment details
   const enriched = results.map(r => ({
     ...r,
     assessment: assessRecord(r)
@@ -173,7 +179,7 @@ app.post('/api/records', (req, res) => {
   };
 
   packagingRecords.unshift(newRecord);
-  logActivity('RECORD_CREATED', body.user || 'Demo User', `Created record ${newId} (${newRecord.productName})`);
+  logActivity('PACKAGING_RECORD_CREATED', newId, body.user || 'Demo User', `Created new packaging specification "${newRecord.productName}" (${newId}).`);
   
   res.status(201).json({
     message: 'Packaging record created successfully',
@@ -216,7 +222,7 @@ app.put('/api/records/:id', (req, res) => {
   };
 
   packagingRecords[index] = updatedRecord;
-  logActivity('RECORD_UPDATED', b.user || 'Demo User', `Updated record ${req.params.id} (${updatedRecord.productName})`);
+  logActivity('PACKAGING_RECORD_UPDATED', req.params.id, b.user || 'Demo User', `Updated parameters for packaging item "${updatedRecord.productName}" (${req.params.id}).`);
 
   res.json({
     message: 'Packaging record updated successfully',
@@ -233,7 +239,7 @@ app.delete('/api/records/:id', (req, res) => {
   }
 
   const deleted = packagingRecords.splice(index, 1)[0];
-  logActivity('RECORD_DELETED', req.query.user || 'Demo User', `Deleted packaging item ${req.params.id} (${deleted.productName})`);
+  logActivity('PACKAGING_RECORD_DELETED', req.params.id, req.query.user || 'Demo User', `Deleted packaging specification "${deleted.productName}" (${req.params.id}).`);
 
   res.json({
     message: `Record ${req.params.id} deleted successfully`,
@@ -241,10 +247,10 @@ app.delete('/api/records/:id', (req, res) => {
   });
 });
 
-// 8. DATA QUALITY ENGINE AUDIT ENDPOINT
+// 8. Data Quality Engine Audit Endpoint
 app.get('/api/data-quality/audit', (req, res) => {
   const auditReport = runDataQualityAudit(packagingRecords);
-  logActivity('QUALITY_AUDIT_RUN', req.query.user || 'Quality Auditor', `Executed automated 10-rule Data Quality Audit across ${packagingRecords.length} records.`);
+  logActivity('DATA_VALIDATION_EXECUTED', 'DATA_QUALITY_SUITE', req.query.user || 'Quality Auditor', `Executed 10-rule automated data quality validation across ${packagingRecords.length} records. Score: ${auditReport.qualityPercentage}%.`);
   res.json({
     projectMeta: {
       name: 'PackReady AI',
@@ -257,7 +263,242 @@ app.get('/api/data-quality/audit', (req, res) => {
   });
 });
 
-// 9. Download Sample CSV
+// 9. Digital Readiness Assessment Engine Endpoint
+app.post('/api/readiness/assess', (req, res) => {
+  const customWeights = req.body.weights || DEFAULT_WEIGHTS;
+  const assessmentResult = runFullReadinessAssessment(packagingRecords, customWeights);
+
+  logActivity(
+    'READINESS_ASSESSMENT_EXECUTED',
+    'READINESS_ENGINE',
+    req.body.user || 'Lead Evaluator',
+    `Completed 5-dimension PPWR Digital Readiness Assessment on ${packagingRecords.length} records. Overall Score: ${assessmentResult.overallScore}%.`
+  );
+
+  res.json({
+    projectMeta: {
+      name: 'PackReady AI',
+      id: 'TG0900889',
+      institution: 'M. Kumarasamy College of Engineering, Karur'
+    },
+    assessment: assessmentResult,
+    timestamp: new Date().toISOString(),
+    honestyNotice: 'Illustrative prototype readiness scoring across 5 dimensions. Not an official legal PPWR compliance certificate.'
+  });
+});
+
+// 10. Rules-Based Gap Analysis Endpoint
+app.get('/api/gaps/analysis', (req, res) => {
+  const gapAnalysisResult = runGapAnalysis(packagingRecords);
+  res.json({
+    projectMeta: {
+      name: 'PackReady AI',
+      id: 'TG0900889',
+      institution: 'M. Kumarasamy College of Engineering, Karur'
+    },
+    analysis: gapAnalysisResult,
+    timestamp: new Date().toISOString(),
+    prototypeNotice: 'Prototype reporting requirements benchmark based on EU PPWR draft articles. Not an official legislative certification.'
+  });
+});
+
+// 11. Recommendation Engine Endpoints
+app.get('/api/recommendations', (req, res) => {
+  const report = generateRecommendations(packagingRecords);
+  res.json({
+    projectMeta: {
+      name: 'PackReady AI',
+      id: 'TG0900889',
+      institution: 'M. Kumarasamy College of Engineering, Karur'
+    },
+    report,
+    timestamp: new Date().toISOString(),
+    prototypeNotice: 'Deterministic rules-based corrective recommendations mapped directly from identified regulatory gaps.'
+  });
+});
+
+app.put('/api/recommendations/:id/status', (req, res) => {
+  const { status, user } = req.body;
+  const recId = req.params.id;
+
+  if (!status || !['Pending', 'In Progress', 'Completed'].includes(status)) {
+    return res.status(400).json({ error: 'Valid status ("Pending", "In Progress", or "Completed") is required.' });
+  }
+
+  const updated = updateRecommendationStatus(recId, status);
+  if (!updated) {
+    return res.status(404).json({ error: 'Failed to update recommendation status.' });
+  }
+
+  logActivity('RECOMMENDATION_STATUS_CHANGED', recId, user || 'Remediation Coordinator', `Updated status of recommendation ${recId} to "${status}".`);
+
+  const updatedReport = generateRecommendations(packagingRecords);
+  res.json({
+    message: `Recommendation ${recId} marked as ${status}`,
+    recId,
+    status,
+    report: updatedReport
+  });
+});
+
+// 12. COMPREHENSIVE REPORTING ENDPOINT (Pulls live application state)
+app.get('/api/reports/comprehensive', (req, res) => {
+  const readiness = runFullReadinessAssessment(packagingRecords, DEFAULT_WEIGHTS);
+  const quality = runDataQualityAudit(packagingRecords);
+  const gaps = runGapAnalysis(packagingRecords);
+  const recommendations = generateRecommendations(packagingRecords);
+
+  // Supplier-level summary
+  const supplierAggregates = {};
+  packagingRecords.forEach(r => {
+    const sName = r.supplierName || 'Unknown Supplier';
+    if (!supplierAggregates[sName]) {
+      supplierAggregates[sName] = {
+        supplierName: sName,
+        country: r.supplierCountry || 'EU / Global',
+        recordCount: 0,
+        readyCount: 0,
+        gapCount: 0,
+        avgReadiness: 0,
+        totalScore: 0
+      };
+    }
+    supplierAggregates[sName].recordCount++;
+    const assess = assessRecord(r);
+    supplierAggregates[sName].totalScore += assess.readinessScore;
+    if (assess.readinessScore >= 80) supplierAggregates[sName].readyCount++;
+  });
+
+  gaps.gaps.forEach(g => {
+    if (supplierAggregates[g.supplier]) {
+      supplierAggregates[g.supplier].gapCount++;
+    }
+  });
+
+  const supplierSummary = Object.values(supplierAggregates).map(s => ({
+    ...s,
+    avgReadiness: Math.round(s.totalScore / (s.recordCount || 1)),
+    complianceRate: Math.round((s.readyCount / (s.recordCount || 1)) * 100)
+  })).sort((a, b) => b.recordCount - a.recordCount);
+
+  logActivity('REPORT_GENERATED', 'FULL_COMPLIANCE_REPORT', req.query.user || 'Executive Viewer', `Generated comprehensive readiness evaluation report across ${packagingRecords.length} records.`);
+
+  res.json({
+    projectMeta: {
+      name: 'PackReady AI',
+      id: 'TG0900889',
+      institution: 'M. Kumarasamy College of Engineering, Karur',
+      evaluationTitle: 'Intelligent Packaging Data Readiness Assessment for PPWR Reporting'
+    },
+    generatedAt: new Date().toISOString(),
+    isDemonstrationReport: true,
+    disclaimer: 'This is a presentation-stage demonstration assessment report. Prototype readiness scores and classifications do not constitute official European Union legal compliance certification.',
+    readinessSummary: {
+      overallScore: readiness.overallScore,
+      totalRecords: packagingRecords.length,
+      readyRecords: readiness.classificationSummary.ready,
+      partiallyReadyRecords: readiness.classificationSummary.partiallyReady,
+      actionRequiredRecords: readiness.classificationSummary.actionRequired,
+      dimensionAverages: readiness.dimensionAverages
+    },
+    dataQualitySummary: {
+      qualityPercentage: quality.qualityPercentage,
+      validRecords: quality.validRecords,
+      recordsWithErrors: quality.recordsWithErrors,
+      duplicateRecords: quality.duplicateRecords,
+      missingInformationCount: quality.missingInformationCount
+    },
+    gapsSummary: {
+      totalGaps: gaps.totalGaps,
+      criticalGaps: gaps.criticalGaps,
+      moderateGaps: gaps.moderateGaps,
+      lowGaps: gaps.lowGaps,
+      materialDistribution: gaps.materialDistribution
+    },
+    recommendationsSummary: {
+      total: recommendations.totalRecommendations,
+      completed: recommendations.completedCount,
+      inProgress: recommendations.inProgressCount,
+      pending: recommendations.pendingCount,
+      completionRate: recommendations.completionPercentage
+    },
+    supplierSummary
+  });
+});
+
+// 13. EXPORT CSV ENDPOINT (Export current live records with assessment)
+app.get('/api/reports/export-csv', (req, res) => {
+  const readiness = runFullReadinessAssessment(packagingRecords, DEFAULT_WEIGHTS);
+  
+  const headers = [
+    'Packaging ID',
+    'Product ID (SKU)',
+    'Product Name',
+    'Packaging Material',
+    'Packaging Format',
+    'Weight (g)',
+    'PCR Content (%)',
+    'Recyclability Class',
+    'Supplier Name',
+    'Supplier Country',
+    'Supporting Evidence',
+    'Overall Readiness Score (%)',
+    'Readiness Classification',
+    'Data Completeness (%)',
+    'Data Accuracy (%)',
+    'Traceability (%)',
+    'Standardization (%)',
+    'Information Availability (%)'
+  ].join(',');
+
+  const rows = readiness.records.map(r => {
+    const raw = packagingRecords.find(p => p.id === r.recordId) || {};
+    return [
+      `"${r.recordId}"`,
+      `"${r.sku || ''}"`,
+      `"${(r.productName || '').replace(/"/g, '""')}"`,
+      `"${r.materialGroup}"`,
+      `"${raw.packagingLevel || 'Primary'}"`,
+      raw.weightGrams !== null && raw.weightGrams !== undefined ? raw.weightGrams : 'Missing',
+      raw.recycledContentPercent !== null && raw.recycledContentPercent !== undefined ? raw.recycledContentPercent : 'Missing',
+      `"${raw.recyclabilityClass || 'Unassigned'}"`,
+      `"${(raw.supplierName || '').replace(/"/g, '""')}"`,
+      `"${raw.supplierCountry || 'EU'}"`,
+      `"${raw.supplierDeclarationStatus || 'Missing'}"`,
+      r.overallScore,
+      `"${r.classification}"`,
+      r.dimensions.completeness,
+      r.dimensions.accuracy,
+      r.dimensions.traceability,
+      r.dimensions.standardization,
+      r.dimensions.availability
+    ].join(',');
+  });
+
+  const fullCsv = [headers, ...rows].join('\n');
+  logActivity('REPORT_CSV_EXPORTED', 'FULL_CATALOG_CSV', req.query.user || 'Exporter', `Exported full packaging catalog with readiness scores (${packagingRecords.length} records) to CSV.`);
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="PackReady_PPWR_Readiness_Report.csv"');
+  res.send(fullCsv);
+});
+
+// 14. AUDIT TRAIL ENDPOINT (Full chronological history)
+app.get('/api/audit', (req, res) => {
+  const { action, limit = 100 } = req.query;
+  let logs = [...auditLogs];
+
+  if (action && action !== 'ALL') {
+    logs = logs.filter(l => l.action.toLowerCase() === action.toLowerCase());
+  }
+
+  res.json({
+    total: logs.length,
+    logs: logs.slice(0, Number(limit))
+  });
+});
+
+// 15. Download Sample CSV
 app.get('/api/sample-csv', (req, res) => {
   const csvHeaders = [
     'Product ID',
@@ -289,7 +530,7 @@ app.get('/api/sample-csv', (req, res) => {
   res.send(fullCsv);
 });
 
-// 10. Upload & Process CSV File
+// 16. Upload & Process CSV File
 app.post('/api/upload-csv', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No CSV file uploaded. Please select a valid CSV file.' });
@@ -369,7 +610,8 @@ app.post('/api/upload-csv', upload.single('file'), (req, res) => {
       packagingRecords = [...results, ...packagingRecords];
 
       logActivity(
-        'CSV_IMPORTED',
+        'CSV_UPLOADED',
+        req.file.originalname,
         req.body.user || 'Demo User',
         `Successfully imported ${results.length} packaging records from file "${req.file.originalname}".`
       );
@@ -389,22 +631,14 @@ app.post('/api/upload-csv', upload.single('file'), (req, res) => {
     });
 });
 
-// 11. Reset to original synthetic state
+// 17. Reset to original synthetic state
 app.post('/api/demo/reset', (req, res) => {
   packagingRecords = generate100Records();
-  logActivity('DEMO_RESET', 'Presenter', 'Reset entire database back to initial 105 synthetic baseline packaging records.');
+  logActivity('DEMO_RESET_EXECUTED', 'BASELINE_CATALOG', 'Presenter', 'Reset entire database back to initial 105 synthetic baseline packaging records.');
   res.json({
     message: 'Reset successful',
     totalRecords: packagingRecords.length,
     stats: calculateOverallStats(packagingRecords)
-  });
-});
-
-// 12. Audit logs endpoint
-app.get('/api/audit', (req, res) => {
-  res.json({
-    total: auditLogs.length,
-    logs: auditLogs
   });
 });
 
