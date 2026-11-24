@@ -1,5 +1,6 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
 import { 
   LayoutDashboard, 
   PackageSearch, 
@@ -10,12 +11,15 @@ import {
   FileText, 
   History,
   Boxes,
-  HelpCircle
+  HelpCircle,
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
   currentTab: string;
   onSelectTab: (tab: string) => void;
+  isOpenMobile?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const navigationItems = [
@@ -29,26 +33,38 @@ export const navigationItems = [
   { id: 'audit', label: 'Audit Trail', icon: History }
 ];
 
-export default function Sidebar({ currentTab, onSelectTab }: SidebarProps) {
-  return (
-    <aside className="w-64 bg-[#0d2818] text-white flex flex-col justify-between shrink-0 shadow-xl border-r border-[#164324]">
+export default function Sidebar({ currentTab, onSelectTab, isOpenMobile = false, onCloseMobile }: SidebarProps) {
+  const content = (
+    <aside className="w-64 bg-[#0d2818] text-white flex flex-col justify-between shrink-0 shadow-xl border-r border-[#164324] h-full overflow-y-auto">
       <div>
         {/* Brand Header */}
-        <div className="p-5 border-b border-[#1b4d2b] flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-400/30 text-emerald-300">
-            <Boxes className="w-6 h-6 text-emerald-400" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-lg text-white tracking-tight">PackReady</span>
-              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-500 text-[#0d2818]">AI</span>
+        <div className="p-4 sm:p-5 border-b border-[#1b4d2b] flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-400/30 text-emerald-300">
+              <Boxes className="w-6 h-6 text-emerald-400" />
             </div>
-            <p className="text-[10px] text-emerald-200/60 font-mono tracking-wider">TG0900889 • MKCE</p>
+            <div>
+              <div className="flex items-center space-x-1.5">
+                <span className="font-bold text-lg text-white tracking-tight">PackReady</span>
+                <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-500 text-[#0d2818]">AI</span>
+              </div>
+              <p className="text-[10px] text-emerald-200/60 font-mono tracking-wider">TG0900889 • MKCE</p>
+            </div>
           </div>
+
+          {/* Close button for mobile drawer */}
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1.5 rounded-lg text-emerald-200 hover:text-white hover:bg-[#164324]"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Project Meta Badge */}
-        <div className="mx-4 my-3 p-2.5 rounded-lg bg-[#143d22] border border-emerald-600/30 text-xs text-emerald-100">
+        <div className="mx-3 sm:mx-4 my-3 p-2.5 rounded-lg bg-[#143d22] border border-emerald-600/30 text-xs text-emerald-100">
           <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-0.5">TECHgium Project</div>
           <p className="text-xs leading-relaxed opacity-90 line-clamp-2">PPWR Data Readiness Evaluation</p>
         </div>
@@ -61,7 +77,10 @@ export default function Sidebar({ currentTab, onSelectTab }: SidebarProps) {
             return (
               <button
                 key={item.id}
-                onClick={() => onSelectTab(item.id)}
+                onClick={() => {
+                  onSelectTab(item.id);
+                  if (onCloseMobile) onCloseMobile();
+                }}
                 className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left ${
                   isActive 
                     ? 'bg-emerald-600 text-white shadow-sm font-semibold' 
@@ -90,5 +109,27 @@ export default function Sidebar({ currentTab, onSelectTab }: SidebarProps) {
         </div>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop Persistent Sidebar */}
+      <div className="hidden md:block h-full shrink-0">
+        {content}
+      </div>
+
+      {/* Mobile Drawer Overlay */}
+      {isOpenMobile && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" 
+            onClick={onCloseMobile} 
+          />
+          <div className="relative z-10 w-64 h-full shadow-2xl">
+            {content}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

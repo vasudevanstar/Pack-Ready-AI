@@ -18,6 +18,7 @@ export default function Home() {
   const [currentTab, setCurrentTab] = useState('overview');
   const [isResetting, setIsResetting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleResetDemo = async () => {
     try {
@@ -52,9 +53,14 @@ export default function Home() {
         isResetting={isResetting}
       />
 
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Sidebar Navigation */}
-        <Sidebar currentTab={currentTab} onSelectTab={setCurrentTab} />
+      <div className="flex flex-1 min-h-0 overflow-hidden relative">
+        {/* Responsive Sidebar (Persistent on Desktop, Slide-out Drawer on Mobile) */}
+        <Sidebar 
+          currentTab={currentTab} 
+          onSelectTab={setCurrentTab}
+          isOpenMobile={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
+        />
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
@@ -62,15 +68,16 @@ export default function Home() {
             onResetDemo={handleResetDemo} 
             onQuickAction={handleQuickAction}
             isResetting={isResetting}
+            onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
           />
 
           {message && (
-            <div className="mx-6 mt-4 p-3 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-medium">
+            <div className="mx-4 sm:mx-6 mt-4 p-3 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-medium">
               {message}
             </div>
           )}
 
-          <main className="p-6 flex-1 max-w-7xl w-full mx-auto">
+          <main className="p-4 sm:p-6 flex-1 max-w-7xl w-full mx-auto">
             {currentTab === 'overview' && (
               <OverviewDashboard onQuickAction={handleQuickAction} />
             )}

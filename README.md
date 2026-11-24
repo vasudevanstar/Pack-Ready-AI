@@ -81,10 +81,6 @@ Open your browser at `http://localhost:3000` to interact with the dashboard.
    - **Live Audit Trail:** Logs system initialization and user actions chronologically.
    - **Reset Demo Functionality:** A single-click button restores the entire dataset back to default synthetic baseline records.
 
----
-
-## 🔜 Next Steps (Phases 2 to 8)
-
 - **Phase 2:** Packaging Data Importer (CSV Upload, column mapping, and inline manual record editing).
 - **Phase 3:** Data Quality Engine (Detailed field completeness checks and inconsistency detection).
 - **Phase 4:** Digital Readiness Assessment (PPWR score breakdown and Digital Product Passport readiness tiering).
