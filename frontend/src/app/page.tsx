@@ -12,6 +12,7 @@ import GapAnalysisView from '@/components/GapAnalysisView';
 import RecommendationsView from '@/components/RecommendationsView';
 import ReportsView from '@/components/ReportsView';
 import AuditTrailView from '@/components/AuditTrailView';
+import { API_BASE } from '@/config';
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState('overview');
@@ -21,7 +22,7 @@ export default function Home() {
   const handleResetDemo = async () => {
     try {
       setIsResetting(true);
-      const res = await fetch('http://localhost:5000/api/demo/reset', { method: 'POST' });
+      const res = await fetch(`${API_BASE}/demo/reset`, { method: 'POST' });
       if (res.ok) {
         setMessage('Demonstration data successfully reset to baseline 105 synthetic records.');
         setTimeout(() => setMessage(null), 4000);

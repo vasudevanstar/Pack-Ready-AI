@@ -27,7 +27,7 @@ import {
 } from 'recharts';
 import KpiCard from './KpiCard';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '@/config';
 
 const COLORS = ['#047857', '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#8b5cf6'];
 const TIER_COLORS: Record<string, string> = {

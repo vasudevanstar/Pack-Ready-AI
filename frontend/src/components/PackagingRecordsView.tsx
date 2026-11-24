@@ -21,7 +21,7 @@ import {
 import CsvUploadModal from './CsvUploadModal';
 import RecordModal from './RecordModal';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '@/config';
 
 const MATERIALS = ['ALL', 'Plastic', 'Paper', 'Cardboard', 'Glass', 'Metal', 'Composite'];
 const STATUS_FILTERS = [

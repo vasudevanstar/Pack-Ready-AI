@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { API_BASE } from '@/config';
 
 interface RecordModalProps {
   isOpen: boolean;
@@ -96,8 +97,8 @@ export default function RecordModal({ isOpen, onClose, onSaveSuccess, initialDat
       setError(null);
 
       const url = isEdit 
-        ? `http://localhost:5000/api/records/${initialData.id}`
-        : 'http://localhost:5000/api/records';
+        ? `${API_BASE}/records/${initialData.id}`
+        : `${API_BASE}/records`;
 
       const method = isEdit ? 'PUT' : 'POST';
 

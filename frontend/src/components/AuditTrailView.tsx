@@ -15,7 +15,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '@/config';
 
 const ACTION_FILTERS = [
   { id: 'ALL', label: 'All Activities' },

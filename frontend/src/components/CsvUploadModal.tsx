@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Upload, FileText, CheckCircle2, AlertCircle, X, Download } from 'lucide-react';
+import { API_BASE } from '@/config';
 
 interface CsvUploadModalProps {
   isOpen: boolean;
@@ -45,7 +46,7 @@ export default function CsvUploadModal({ isOpen, onClose, onUploadSuccess }: Csv
       formData.append('file', file);
       formData.append('user', 'Presentation Evaluator');
 
-      const res = await fetch('http://localhost:5000/api/upload-csv', {
+      const res = await fetch(`${API_BASE}/upload-csv`, {
         method: 'POST',
         body: formData
       });
@@ -69,7 +70,7 @@ export default function CsvUploadModal({ isOpen, onClose, onUploadSuccess }: Csv
   };
 
   const downloadSampleCsv = () => {
-    window.open('http://localhost:5000/api/sample-csv', '_blank');
+    window.open(`${API_BASE}/sample-csv`, '_blank');
   };
 
   return (

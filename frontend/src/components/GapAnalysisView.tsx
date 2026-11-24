@@ -26,7 +26,7 @@ import {
 } from 'recharts';
 import RecordModal from './RecordModal';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '@/config';
 
 export default function GapAnalysisView() {
   const [loading, setLoading] = useState(true);
