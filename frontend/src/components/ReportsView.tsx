@@ -281,7 +281,7 @@ export default function ReportsView() {
         {/* Report Footer */}
         <div className="pt-4 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between text-[11px] text-gray-500 gap-2">
           <span>PackReady AI • Project ID TG0900889 • M. Kumarasamy College of Engineering</span>
-          <span>Phase 7 Demonstration Release</span>
+          <span>TECHgium Evaluation Release</span>
         </div>
       </div>
     </div>

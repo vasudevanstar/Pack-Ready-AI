@@ -14,7 +14,7 @@ export default function Header({ onResetDemo, onQuickAction, isResetting }: Head
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold text-gray-900 tracking-tight">PackReady AI</h1>
           <span className="text-xs px-2 py-0.5 font-medium rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-            Phase 1 Demonstration
+            Enterprise Demonstration
           </span>
         </div>
         <p className="text-xs text-gray-500 mt-0.5">
