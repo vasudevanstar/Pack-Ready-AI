@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { 
-  History, 
-  RefreshCw, 
-  Search, 
-  Clock, 
-  User, 
-  Filter, 
-  Activity, 
-  CheckCircle2, 
+import {
+  History,
+  RefreshCw,
+  Search,
+  Clock,
+  User,
+  Filter,
+  Activity,
+  CheckCircle2,
   HelpCircle,
   FileSpreadsheet,
   AlertCircle
@@ -212,7 +212,7 @@ export default function AuditTrailView() {
                         <span className="font-medium">{log.user}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-gray-800 max-w-[340px] leading-normal">
+                    <td className="py-3 px-3 text-gray-800 max-w-85 leading-normal">
                       {log.description}
                     </td>
                   </tr>
