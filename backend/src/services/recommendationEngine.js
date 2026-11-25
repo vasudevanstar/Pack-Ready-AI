@@ -1,5 +1,5 @@
 /**
- * Recommendation Engine for PackReady AI (TECHgium TG0900889)
+ * Recommendation Engine for PackReady AI
  * 
  * Maps regulatory gaps into actionable, deterministic corrective workflows:
  * 1. Missing packaging weight → "Request certified packaging tare weight measurement from the supplier."

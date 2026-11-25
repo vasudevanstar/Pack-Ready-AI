@@ -115,7 +115,7 @@ export default function AuditTrailView() {
         <HelpCircle className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <span className="font-semibold text-emerald-900">Audit Trail Verification Note: </span>
-          The audit history recorded below tracks user operations across all modules in in-memory / local application state for the TECHgium demonstration. Every CSV upload, manual packaging record edit, quality check, and recommendation status transition is recorded in real time.
+          The audit history recorded below tracks user operations across all modules in in-memory / local application state for the demonstration. Every CSV upload, manual packaging record edit, quality check, and recommendation status transition is recorded in real time.
         </div>
       </div>
 

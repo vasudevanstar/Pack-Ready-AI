@@ -1,5 +1,5 @@
 /**
- * Digital Readiness Assessment Engine for PackReady AI (TECHgium TG0900889)
+ * Digital Readiness Assessment Engine for PackReady AI
  * 
  * Accurately scores the 5 core PPWR digital dimensions:
  * 1. Data Completeness (weight: 25%)

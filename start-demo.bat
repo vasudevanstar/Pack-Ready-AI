@@ -1,6 +1,6 @@
 @echo off
 echo =======================================================
-echo  Starting PackReady AI (TECHgium TG0900889)
+echo  Starting PackReady AI
 echo =======================================================
 
 start "PackReady AI - Backend" cmd /k "cd backend && npm run dev"

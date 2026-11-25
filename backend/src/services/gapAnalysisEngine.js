@@ -1,5 +1,5 @@
 /**
- * Rules-Based Gap Analysis Engine for PackReady AI (TECHgium TG0900889)
+ * Rules-Based Gap Analysis Engine for PackReady AI
  * 
  * Compares packaging records against configurable prototype PPWR reporting requirements:
  * 1. Missing packaging weight → Weight Information Gap (CRITICAL)

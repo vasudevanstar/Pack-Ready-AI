@@ -48,7 +48,7 @@ export default function Sidebar({ currentTab, onSelectTab, isOpenMobile = false,
                 <span className="font-bold text-lg text-white tracking-tight">PackReady</span>
                 <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-500 text-[#0d2818]">AI</span>
               </div>
-              <p className="text-[10px] text-emerald-200/60 font-mono tracking-wider">TG0900889 • MKCE</p>
+              <p className="text-[10px] text-emerald-200/60 font-mono tracking-wider">MKCE</p>
             </div>
           </div>
 
@@ -65,7 +65,7 @@ export default function Sidebar({ currentTab, onSelectTab, isOpenMobile = false,
 
         {/* Project Meta Badge */}
         <div className="mx-3 sm:mx-4 my-3 p-2.5 rounded-lg bg-[#143d22] border border-emerald-600/30 text-xs text-emerald-100">
-          <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-0.5">TECHgium Project</div>
+          <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-0.5">PPWR Compliance</div>
           <p className="text-xs leading-relaxed opacity-90 line-clamp-2">PPWR Data Readiness Evaluation</p>
         </div>
 

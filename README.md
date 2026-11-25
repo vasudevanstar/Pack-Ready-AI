@@ -1,6 +1,5 @@
 # PackReady AI — Intelligent Packaging Data Readiness Assessment for PPWR Reporting
 
-**Project ID:** TG0900889  
 **Institution:** M. Kumarasamy College of Engineering, Karur  
 **Stage:** Phase 1 — Project Architecture & Overview Dashboard
 
@@ -8,7 +7,7 @@
 
 ## 🌿 Overview
 
-**PackReady AI** is an enterprise-grade web application prototype designed for the TECHgium competition. It assesses packaging specifications against the EU Packaging and Packaging Waste Regulation (PPWR) requirements (Articles 5, 6, 7 & 11) using transparent, rule-based data quality and readiness evaluation logic.
+**PackReady AI** is an enterprise-grade web application prototype. It assesses packaging specifications against the EU Packaging and Packaging Waste Regulation (PPWR) requirements (Articles 5, 6, 7 & 11) using transparent, rule-based data quality and readiness evaluation logic.
 
 > **Project Honesty & Prototype Disclosure:**  
 > This application is an **AI-assisted packaging data readiness demonstration**. All assessment scores, gap classifications, and recommendations are computed using transparent, deterministic, rules-based logic. It does not claim official PPWR regulatory certification or production ERP integrations.

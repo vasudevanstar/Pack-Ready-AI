@@ -109,7 +109,7 @@ export default function OverviewDashboard({ onQuickAction }: { onQuickAction: (t
         <Info className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <span className="font-semibold text-emerald-900">Prototype Transparency Note: </span>
-          This is an <strong>AI-assisted packaging data readiness demonstration</strong> for the TECHgium evaluation (TG0900889). All scoring and gap detection utilize transparent, rule-based algorithms based on EU PPWR draft articles (Articles 5, 6, 7 & 11). Synthetic sample data is used for demonstration purposes. Not an official legal certification.
+          This is an <strong>AI-assisted packaging data readiness demonstration</strong>. All scoring and gap detection utilize transparent, rule-based algorithms based on EU PPWR draft articles (Articles 5, 6, 7 & 11). Synthetic sample data is used for demonstration purposes. Not an official legal certification.
         </div>
       </div>
 

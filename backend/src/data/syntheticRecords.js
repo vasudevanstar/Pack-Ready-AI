@@ -1,5 +1,5 @@
 /**
- * Synthetic packaging data generator for PackReady AI (TECHgium TG0900889)
+ * Synthetic packaging data generator for PackReady AI
  * Generates 100+ realistic packaging records covering:
  * Plastic, Paper, Cardboard, Glass, Metal, Composite
  * Realistic mix of complete, incomplete, and inconsistent records for demonstration.

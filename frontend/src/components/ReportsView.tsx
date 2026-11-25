@@ -89,7 +89,7 @@ export default function ReportsView() {
             </span>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Consolidated readiness, data quality, gap analysis, and converter summaries ready for TECHgium jury evaluation.
+            Consolidated readiness, data quality, gap analysis, and converter summaries ready for evaluation.
           </p>
         </div>
 
@@ -127,7 +127,6 @@ export default function ReportsView() {
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-extrabold text-xl text-emerald-950 tracking-tight">PackReady AI</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-emerald-700 text-white font-mono font-semibold">TG0900889</span>
             </div>
             <h1 className="text-sm font-semibold text-gray-800 mt-1">
               Intelligent Packaging Data Readiness Assessment for PPWR Reporting
@@ -280,8 +279,8 @@ export default function ReportsView() {
 
         {/* Report Footer */}
         <div className="pt-4 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between text-[11px] text-gray-500 gap-2">
-          <span>PackReady AI • Project ID TG0900889 • M. Kumarasamy College of Engineering</span>
-          <span>TECHgium Evaluation Release</span>
+          <span>PackReady AI • M. Kumarasamy College of Engineering</span>
+          <span>Evaluation Release</span>
         </div>
       </div>
     </div>

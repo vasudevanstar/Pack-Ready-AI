@@ -32,7 +32,7 @@ export default function Header({ onResetDemo, onQuickAction, isResetting, onOpen
               </span>
             </div>
             <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">
-              Intelligent Packaging Data Readiness Assessment for PPWR • Project ID: <span className="font-semibold text-gray-700">TG0900889</span>
+              Intelligent Packaging Data Readiness Assessment for PPWR Reporting
             </p>
           </div>
         </div>

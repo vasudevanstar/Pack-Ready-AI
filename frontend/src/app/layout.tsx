@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PackReady AI — Intelligent Packaging Data Readiness Assessment",
-  description: "Intelligent Packaging Data Readiness Assessment for PPWR Reporting (Project ID: TG0900889 - M. Kumarasamy College of Engineering)",
+  description: "Intelligent Packaging Data Readiness Assessment for PPWR Reporting - M. Kumarasamy College of Engineering",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

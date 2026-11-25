@@ -1,5 +1,5 @@
 /**
- * Data Quality Engine for PackReady AI (TECHgium TG0900889)
+ * Data Quality Engine for PackReady AI
  * 
  * Implements 10 deterministic validation rules:
  * 1. Missing mandatory packaging fields (SKU, product name, ID)

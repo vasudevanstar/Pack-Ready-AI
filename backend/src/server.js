@@ -34,7 +34,7 @@ let auditLogs = [
     relatedRecord: 'CATALOG_INIT',
     timestamp: new Date(Date.now() - 3600000).toISOString(),
     user: 'System Administrator',
-    description: 'Initialized PackReady AI prototype with 105 synthetic packaging specifications for TECHgium evaluation.'
+    description: 'Initialized PackReady AI prototype with 105 synthetic packaging specifications.'
   }
 ];
 
@@ -58,7 +58,6 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
     project: 'PackReady AI',
-    projectId: 'TG0900889',
     institution: 'M. Kumarasamy College of Engineering, Karur',
     title: 'Intelligent Packaging Data Readiness Assessment for PPWR Reporting',
     totalRecords: packagingRecords.length,
@@ -73,7 +72,6 @@ app.get('/api/dashboard/stats', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur'
     },
     metrics: stats,
@@ -254,7 +252,6 @@ app.get('/api/data-quality/audit', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur'
     },
     report: auditReport,
@@ -278,7 +275,6 @@ app.post('/api/readiness/assess', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur'
     },
     assessment: assessmentResult,
@@ -293,7 +289,6 @@ app.get('/api/gaps/analysis', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur'
     },
     analysis: gapAnalysisResult,
@@ -308,7 +303,6 @@ app.get('/api/recommendations', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur'
     },
     report,
@@ -386,7 +380,6 @@ app.get('/api/reports/comprehensive', (req, res) => {
   res.json({
     projectMeta: {
       name: 'PackReady AI',
-      id: 'TG0900889',
       institution: 'M. Kumarasamy College of Engineering, Karur',
       evaluationTitle: 'Intelligent Packaging Data Readiness Assessment for PPWR Reporting'
     },
@@ -646,7 +639,6 @@ app.post('/api/demo/reset', (req, res) => {
 app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(` PackReady AI API Server running on port ${PORT}`);
-  console.log(` Project ID: TG0900889`);
   console.log(` M. Kumarasamy College of Engineering, Karur`);
   console.log(` Endpoint: http://localhost:${PORT}/api/health`);
   console.log(`=======================================================`);
